@@ -59,6 +59,7 @@ namespace pigeOnline.Controllers
         {
             review.TimeAndDate = DateTime.Now.ToString();
             if (ModelState.IsValid)
+
             {
                 _context.Add(review);
                 await _context.SaveChangesAsync();
