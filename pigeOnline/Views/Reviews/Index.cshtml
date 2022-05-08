@@ -4,50 +4,56 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RateNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Text)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TimeAndDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RateNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Text)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeAndDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div id="TableWrapper">
+	<div class="table-responsive" id="TableContent">
+	<table class="table table-fixed" id="ReviewTable">
+			<thead>
+				<tr>
+					<th scope="col" class="col-1 TextCol">
+						Number
+					</th>
+					<th scope="col" class="col-1 TextCol">
+						Rating
+					</th>
+					<th scope="col" class="col-6 TextCol">
+						Review
+					</th>
+					<th scope="col" class="col-2 TextCol">
+						Time and date
+					</th>
+					<th scope="col" class="col-2 TextCol">
+                        Options
+                    </th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+
+					<tr>
+						<th scope="row" class="col-1 TextCol">
+							@Html.DisplayFor(modelItem => item.Name)
+						</th>
+						<th class="col-1 TextCol">
+							@Html.DisplayFor(modelItem => item.RateNumber)
+						</th>
+						<th class="col-6 TextCol">
+							@Html.DisplayFor(modelItem => item.Text)
+						</th>
+						<th class="col-2 TextCol">
+							@Html.DisplayFor(modelItem => item.TimeAndDate)
+						</th>
+						<th class="col-2">
+							<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+							<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+							<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+						</th>
+					</tr>
+				}
+			</tbody>
+	</table>
+	</div>
+</div>
+
