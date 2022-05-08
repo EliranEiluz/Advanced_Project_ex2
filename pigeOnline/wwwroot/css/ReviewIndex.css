@@ -1,6 +1,7 @@
 ﻿
 .table-responsive {
     max-height: 430px;
+    
 }
 
 #TableWrapper {
@@ -16,9 +17,6 @@
 
 .TextCol {
     text-align: center;
-    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
-.col-4 {
-    overflow-wrap: break-word;
-}
