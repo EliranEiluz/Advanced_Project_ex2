@@ -6,9 +6,9 @@
 
 
 
-<div id="TableWrapper">
+<div class="container" id="TableWrapper">
 	<div class="table-responsive" id="TableContent">
-	<table class="table table-fixed" id="ReviewTable">
+	<table class="table table-fixed table-responsive" id="ReviewTable">
 			<thead>
 				<tr>
 					<th scope="col" class="col-1 TextCol">
@@ -17,13 +17,13 @@
 					<th scope="col" class="col-1 TextCol">
 						Rating
 					</th>
-					<th scope="col" class="col-6 TextCol">
+					<th scope="col" class="col-4 TextCol">
 						Review
 					</th>
 					<th scope="col" class="col-2 TextCol">
 						Time and date
 					</th>
-					<th scope="col" class="col-2 TextCol">
+					<th scope="col" class="col-4 TextCol">
                         Options
                     </th>
 				</tr>
@@ -39,13 +39,13 @@
 						<th class="col-1 TextCol">
 							@Html.DisplayFor(modelItem => item.RateNumber)
 						</th>
-						<th class="col-6 TextCol">
+						<th class="col-4 TextCol">
 							@Html.DisplayFor(modelItem => item.Text)
 						</th>
 						<th class="col-2 TextCol">
 							@Html.DisplayFor(modelItem => item.TimeAndDate)
 						</th>
-						<th class="col-2">
+						<th class="col-4 TextCol">
 							<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
 							<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
 							<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
@@ -56,4 +56,6 @@
 	</table>
 	</div>
 </div>
+
+<button><a asp-action="Create" class="btn btn-primary">Create</a></button>
 

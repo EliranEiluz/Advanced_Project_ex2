@@ -1,12 +1,10 @@
-﻿#ReviewTable {
-
-}
-
+﻿
 .table-responsive {
-    max-height: 500px;
+    max-height: 430px;
 }
 
 #TableWrapper {
+
     background-color: #e3e4f6;
     border-style: solid;
     border-width: 3pt;
@@ -17,5 +15,10 @@
 }
 
 .TextCol {
-    text-align:center;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+
+.col-4 {
+    overflow-wrap: break-word;
 }
