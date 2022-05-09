@@ -7,6 +7,16 @@
 
 <div id="showAverage">The rating average is: @ViewBag.Average</div>
 
+<form class="container-fluid" id="searchForm">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="searchBar row">
+			<input name="Search" type="text" class="form-control searchInput col-9" id="searchInputID" autoComplete="off" placeholder="Please enter your search here..." />
+			<button type="submit" class="btn btn-success searchBut col-3">Search</button>
+			<span class="text-danger"></span>
+		</div>
+</form>
+
+
 
 <div class="container" id="TableWrapper">
 	<div class="table-responsive" id="TableContent">
@@ -30,7 +40,7 @@
                     </th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="tableBody">
 				@foreach (var item in Model)
 				{
 
@@ -61,3 +71,28 @@
 
 <a asp-action="Create" class="btn btn-primary" id="createBtn">Create</a>
 
+
+@section Scripts {
+<script type="text/html" id="template">
+    <tr>
+        <th scope="row" class="col-1 TextCol">
+            {name}
+        </th>
+        <th class="col-md-1 TextCol">
+            {rateNumber}
+        </th>
+        <th class="col-md-6 TextCol">
+            {text}
+        </th>
+        <th class="col-md-2 TextCol">
+            {timeAndDate}
+        </th>
+        <th class="col-md-2 TextCol">
+            <a asp-action="Edit" asp-route-id="{id}">Edit</a> |
+            <a asp-action="Details" asp-route-id="{id}">Details</a> |
+            <a asp-action="Delete" asp-route-id="{id}">Delete</a>
+        </th>
+    </tr>
+</script>
+<script src="~/js/searchScript.js"></script>
+}

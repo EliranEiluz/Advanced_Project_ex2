@@ -151,6 +151,24 @@ namespace pigeOnline.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        
+        // GET: Reviews/Search
+        [Route("Reviews/Search/{searchVal}")]
+        public async Task<List<Review>> Search(string searchVal)
+        {
+            Console.WriteLine(searchVal);
+            List<Review> reviews = await _context.Review.ToListAsync();
+            List<Review> filterList = new List<Review> {};
+            foreach (Review review in reviews)
+            {
+                if(review.Name.Contains(searchVal) || review.Text.Contains(searchVal))
+                {
+                    filterList.Add(review);
+                } 
+            }
+            return filterList;
+        }
+
         private bool ReviewExists(int id)
         {
             return _context.Review.Any(e => e.Id == id);
