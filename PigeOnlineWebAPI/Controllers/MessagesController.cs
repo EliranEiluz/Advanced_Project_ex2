@@ -6,30 +6,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using pigeOnline.Data;
-using pigeOnline.Models;
+using PigeOnlineAPI;
+using PigeOnlineWebAPI.Data;
 
-namespace pigeOnline.Controllers
+namespace PigeOnlineWebAPI.Controllers
 {
-    public class ReviewsController : Controller
+    public class MessagesController : Controller
     {
-        private readonly pigeOnlineContext _context;
+        private readonly PigeOnlineWebAPIContext _context;
 
-        public ReviewsController(pigeOnlineContext context)
+        public MessagesController(PigeOnlineWebAPIContext context)
         {
             _context = context;
         }
 
-        // GET: Reviews
+        // GET: Messages
         public async Task<IActionResult> Index()
         {
-            List<Review> reviews = await _context.Review.ToListAsync();
-
-            ViewBag.Average = System.Math.Round(reviews.Average(item => item.RateNumber),2);
-            return View(reviews);
+            return View(await _context.Message.ToListAsync());
         }
 
-        // GET: Reviews/Details/5
+        // GET: Messages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,41 +34,39 @@ namespace pigeOnline.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review
+            var message = await _context.Message
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (review == null)
+            if (message == null)
             {
                 return NotFound();
             }
 
-            return View(review);
+            return View(message);
         }
 
-        // GET: Reviews/Create
+        // GET: Messages/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Reviews/Create
+        // POST: Messages/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,RateNumber,Text")] Review review)
+        public async Task<IActionResult> Create([Bind("Id,From,Content,Type,Date,SenderPicture")] Message message)
         {
-            review.TimeAndDate = DateTime.Now.ToString();
             if (ModelState.IsValid)
-
             {
-                _context.Add(review);
+                _context.Add(message);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(review);
+            return View(message);
         }
 
-        // GET: Reviews/Edit/5
+        // GET: Messages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,23 +74,22 @@ namespace pigeOnline.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review.FindAsync(id);
-            if (review == null)
+            var message = await _context.Message.FindAsync(id);
+            if (message == null)
             {
                 return NotFound();
             }
-            return View(review);
+            return View(message);
         }
 
-        // POST: Reviews/Edit/5
+        // POST: Messages/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RateNumber,Text,TimeAndDate")] Review review)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,From,Content,Type,Date,SenderPicture")] Message message)
         {
-            review.TimeAndDate = DateTime.Now.ToString();
-            if (id != review.Id)
+            if (id != message.Id)
             {
                 return NotFound();
             }
@@ -104,12 +98,12 @@ namespace pigeOnline.Controllers
             {
                 try
                 {
-                    _context.Update(review);
+                    _context.Update(message);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReviewExists(review.Id))
+                    if (!MessageExists(message.Id))
                     {
                         return NotFound();
                     }
@@ -120,10 +114,10 @@ namespace pigeOnline.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(review);
+            return View(message);
         }
 
-        // GET: Reviews/Delete/5
+        // GET: Messages/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,48 +125,30 @@ namespace pigeOnline.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review
+            var message = await _context.Message
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (review == null)
+            if (message == null)
             {
                 return NotFound();
             }
 
-            return View(review);
+            return View(message);
         }
 
-        // POST: Reviews/Delete/5
+        // POST: Messages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var review = await _context.Review.FindAsync(id);
-            _context.Review.Remove(review);
+            var message = await _context.Message.FindAsync(id);
+            _context.Message.Remove(message);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        
-        // GET: Reviews/Search
-        [Route("Reviews/Search/{searchVal}")]
-        public async Task<List<Review>> Search(string searchVal)
+        private bool MessageExists(int id)
         {
-            Console.WriteLine(searchVal);
-            List<Review> reviews = await _context.Review.ToListAsync();
-            List<Review> filterList = new List<Review> {};
-            foreach (Review review in reviews)
-            {
-                if(review.Name.Contains(searchVal) || review.Text.Contains(searchVal))
-                {
-                    filterList.Add(review);
-                } 
-            }
-            return filterList;
-        }
-
-        private bool ReviewExists(int id)
-        {
-            return _context.Review.Any(e => e.Id == id);
+            return _context.Message.Any(e => e.Id == id);
         }
     }
 }

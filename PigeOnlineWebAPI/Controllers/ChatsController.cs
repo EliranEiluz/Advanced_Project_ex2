@@ -6,30 +6,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using pigeOnline.Data;
-using pigeOnline.Models;
+using PigeOnlineAPI;
+using PigeOnlineWebAPI.Data;
 
-namespace pigeOnline.Controllers
+namespace PigeOnlineWebAPI.Controllers
 {
-    public class ReviewsController : Controller
+    public class ChatsController : Controller
     {
-        private readonly pigeOnlineContext _context;
+        private readonly PigeOnlineWebAPIContext _context;
 
-        public ReviewsController(pigeOnlineContext context)
+        public ChatsController(PigeOnlineWebAPIContext context)
         {
             _context = context;
         }
 
-        // GET: Reviews
+        // GET: Chats
         public async Task<IActionResult> Index()
         {
-            List<Review> reviews = await _context.Review.ToListAsync();
-
-            ViewBag.Average = System.Math.Round(reviews.Average(item => item.RateNumber),2);
-            return View(reviews);
+            return View(await _context.Chat.ToListAsync());
         }
 
-        // GET: Reviews/Details/5
+        // GET: Chats/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,41 +34,39 @@ namespace pigeOnline.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review
+            var chat = await _context.Chat
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (review == null)
+            if (chat == null)
             {
                 return NotFound();
             }
 
-            return View(review);
+            return View(chat);
         }
 
-        // GET: Reviews/Create
+        // GET: Chats/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Reviews/Create
+        // POST: Chats/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,RateNumber,Text")] Review review)
+        public async Task<IActionResult> Create([Bind("Id,ChatWith,LastMessage,Date,DisplayName,Image")] Chat chat)
         {
-            review.TimeAndDate = DateTime.Now.ToString();
             if (ModelState.IsValid)
-
             {
-                _context.Add(review);
+                _context.Add(chat);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(review);
+            return View(chat);
         }
 
-        // GET: Reviews/Edit/5
+        // GET: Chats/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,23 +74,22 @@ namespace pigeOnline.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review.FindAsync(id);
-            if (review == null)
+            var chat = await _context.Chat.FindAsync(id);
+            if (chat == null)
             {
                 return NotFound();
             }
-            return View(review);
+            return View(chat);
         }
 
-        // POST: Reviews/Edit/5
+        // POST: Chats/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RateNumber,Text,TimeAndDate")] Review review)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ChatWith,LastMessage,Date,DisplayName,Image")] Chat chat)
         {
-            review.TimeAndDate = DateTime.Now.ToString();
-            if (id != review.Id)
+            if (id != chat.Id)
             {
                 return NotFound();
             }
@@ -104,12 +98,12 @@ namespace pigeOnline.Controllers
             {
                 try
                 {
-                    _context.Update(review);
+                    _context.Update(chat);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReviewExists(review.Id))
+                    if (!ChatExists(chat.Id))
                     {
                         return NotFound();
                     }
@@ -120,10 +114,10 @@ namespace pigeOnline.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(review);
+            return View(chat);
         }
 
-        // GET: Reviews/Delete/5
+        // GET: Chats/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,48 +125,30 @@ namespace pigeOnline.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review
+            var chat = await _context.Chat
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (review == null)
+            if (chat == null)
             {
                 return NotFound();
             }
 
-            return View(review);
+            return View(chat);
         }
 
-        // POST: Reviews/Delete/5
+        // POST: Chats/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var review = await _context.Review.FindAsync(id);
-            _context.Review.Remove(review);
+            var chat = await _context.Chat.FindAsync(id);
+            _context.Chat.Remove(chat);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        
-        // GET: Reviews/Search
-        [Route("Reviews/Search/{searchVal}")]
-        public async Task<List<Review>> Search(string searchVal)
+        private bool ChatExists(int id)
         {
-            Console.WriteLine(searchVal);
-            List<Review> reviews = await _context.Review.ToListAsync();
-            List<Review> filterList = new List<Review> {};
-            foreach (Review review in reviews)
-            {
-                if(review.Name.Contains(searchVal) || review.Text.Contains(searchVal))
-                {
-                    filterList.Add(review);
-                } 
-            }
-            return filterList;
-        }
-
-        private bool ReviewExists(int id)
-        {
-            return _context.Review.Any(e => e.Id == id);
+            return _context.Chat.Any(e => e.Id == id);
         }
     }
 }
