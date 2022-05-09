@@ -23,7 +23,9 @@ namespace pigeOnline.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Review.ToListAsync());
+            List<Review> reviews = await _context.Review.ToListAsync();
+            ViewBag.Average = reviews.Average(item => item.RateNumber);
+            return View(reviews);
         }
 
         // GET: Reviews/Details/5

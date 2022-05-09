@@ -1,6 +1,6 @@
 ﻿
 .table-responsive {
-    max-height: 430px;
+    max-height: 410px;
     
 }
 
@@ -20,3 +20,21 @@
     word-break: break-all;
 }
 
+#showAverage {
+    text-align: center;
+    font-size: 40px;
+    color: #e3e4f6;
+    font-family: var(--bs-body-font-family);
+    margin-bottom:10px;
+}
+
+#createBtn {
+    margin-top: 10px;
+    background-color: rgb(13, 13, 88);
+}
+
+#createBtn:hover {
+    background-color: rgb(11, 11, 92);
+    color: white;
+    border-color: rgb(11, 11, 92);
+}
