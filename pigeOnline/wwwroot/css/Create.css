@@ -28,3 +28,7 @@
     color: white;
     border-color: rgb(11, 11, 92);
 }
+
+.editBut {
+    width: 35%;
+}

@@ -91,6 +91,7 @@ namespace pigeOnline.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RateNumber,Text,TimeAndDate")] Review review)
         {
+            review.TimeAndDate = DateTime.Now.ToString();
             if (id != review.Id)
             {
                 return NotFound();
