@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PigeOnlineWebAPI.Data;
+using PigeOnlineWebAPI;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PigeOnlineWebAPIContext>(options =>
@@ -12,7 +13,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddSingleton<IPigeOnlineService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

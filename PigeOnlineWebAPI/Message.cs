@@ -1,4 +1,4 @@
-﻿namespace PigeOnlineAPI
+﻿namespace PigeOnlineWebAPI
 {
     public class Message
     {

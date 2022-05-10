@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PigeOnlineAPI;
-using PigeOnlineAPI.Controllers;
+using PigeOnlineWebAPI;
 
 namespace PigeOnlineWebAPI.Data
 {
@@ -16,10 +15,10 @@ namespace PigeOnlineWebAPI.Data
         {
         }
 
-        public DbSet<PigeOnlineAPI.Chat> Chat { get; set; }
+        public DbSet<PigeOnlineWebAPI.Chat> Chat { get; set; }
 
-        public DbSet<PigeOnlineAPI.Message> Message { get; set; }
+        public DbSet<PigeOnlineWebAPI.Message> Message { get; set; }
 
-        public DbSet<PigeOnlineAPI.Controllers.User> User { get; set; }
+        public DbSet<PigeOnlineWebAPI.User> User { get; set; }
     }
 }

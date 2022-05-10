@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PigeOnlineAPI.Controllers
+namespace PigeOnlineWebAPI
 {
     public class User
     {

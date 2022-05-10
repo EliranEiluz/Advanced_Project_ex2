@@ -11,7 +11,7 @@ using PigeOnlineWebAPI.Data;
 namespace PigeOnlineWebAPI.Migrations
 {
     [DbContext(typeof(PigeOnlineWebAPIContext))]
-    [Migration("20220509160421_Init")]
+    [Migration("20220510181610_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace PigeOnlineWebAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("PigeOnlineAPI.Chat", b =>
+            modelBuilder.Entity("PigeOnlineWebAPI.Chat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,34 +51,15 @@ namespace PigeOnlineWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ServerURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Chat");
                 });
 
-            modelBuilder.Entity("PigeOnlineAPI.Controllers.User", b =>
-                {
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Username");
-
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("PigeOnlineAPI.Message", b =>
+            modelBuilder.Entity("PigeOnlineWebAPI.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -109,6 +90,28 @@ namespace PigeOnlineWebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("PigeOnlineWebAPI.User", b =>
+                {
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Username");
+
+                    b.ToTable("User");
                 });
 #pragma warning restore 612, 618
         }

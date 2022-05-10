@@ -18,7 +18,8 @@ namespace PigeOnlineWebAPI.Migrations
                     LastMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ServerURL = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

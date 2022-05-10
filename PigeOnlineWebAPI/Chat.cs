@@ -1,4 +1,4 @@
-﻿namespace PigeOnlineAPI
+﻿namespace PigeOnlineWebAPI
 {
     public class Chat
     {
@@ -9,5 +9,6 @@
         public string Date { get; set; }
         public string DisplayName { get; set; }
         public string Image { get; set; }
+        public string? ServerURL { get; set; }
     }
 }

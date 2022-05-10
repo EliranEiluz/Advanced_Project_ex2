@@ -3,15 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PigeOnlineAPI;
+using PigeOnlineWebAPI;
 using PigeOnlineWebAPI.Data;
 
 namespace PigeOnlineWebAPI.Controllers
 {
-    public class ChatsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ChatsController : ControllerBase
     {
         private readonly PigeOnlineWebAPIContext _context;
 
@@ -20,130 +22,83 @@ namespace PigeOnlineWebAPI.Controllers
             _context = context;
         }
 
-        // GET: Chats
-        public async Task<IActionResult> Index()
+        // GET: api/Chats
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Chat>>> GetChat()
         {
-            return View(await _context.Chat.ToListAsync());
+            return await _context.Chat.ToListAsync();
         }
 
-        // GET: Chats/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Chats/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Chat>> GetChat(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var chat = await _context.Chat
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (chat == null)
-            {
-                return NotFound();
-            }
-
-            return View(chat);
-        }
-
-        // GET: Chats/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Chats/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ChatWith,LastMessage,Date,DisplayName,Image")] Chat chat)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(chat);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(chat);
-        }
-
-        // GET: Chats/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var chat = await _context.Chat.FindAsync(id);
+
             if (chat == null)
             {
                 return NotFound();
             }
-            return View(chat);
+
+            return chat;
         }
 
-        // POST: Chats/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ChatWith,LastMessage,Date,DisplayName,Image")] Chat chat)
+        // PUT: api/Chats/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutChat(int id, Chat chat)
         {
             if (id != chat.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(chat).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(chat);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ChatExists(chat.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(chat);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ChatExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Chats/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/Chats
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Chat>> PostChat(Chat chat)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            _context.Chat.Add(chat);
+            await _context.SaveChangesAsync();
 
-            var chat = await _context.Chat
-                .FirstOrDefaultAsync(m => m.Id == id);
+            return CreatedAtAction("GetChat", new { id = chat.Id }, chat);
+        }
+
+        // DELETE: api/Chats/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteChat(int id)
+        {
+            var chat = await _context.Chat.FindAsync(id);
             if (chat == null)
             {
                 return NotFound();
             }
 
-            return View(chat);
-        }
-
-        // POST: Chats/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var chat = await _context.Chat.FindAsync(id);
             _context.Chat.Remove(chat);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool ChatExists(int id)
