@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +12,18 @@ using PigeOnlineWebAPI.Data;
 
 namespace PigeOnlineWebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly PigeOnlineWebAPIContext _context;
+        private IConfiguration _config;
 
-        public UsersController(PigeOnlineWebAPIContext context)
+        public UsersController(PigeOnlineWebAPIContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         // GET: api/Users
