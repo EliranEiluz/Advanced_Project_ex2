@@ -15,11 +15,13 @@ namespace PigeOnlineWebAPI.Controllers
     [ApiController]
     public class MessagesController : ControllerBase
     {
-        private readonly PigeOnlineWebAPIContext _context;
+        private IPigeOnlineService _service;
+        private readonly IConfiguration _config;
 
-        public MessagesController(PigeOnlineWebAPIContext context)
+        public MessagesController(IPigeOnlineService service, IConfiguration config)
         {
-            _context = context;
+            _service = service;
+            _config = config;
         }
 
         // GET: api/Messages

@@ -17,12 +17,12 @@ namespace PigeOnlineWebAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly PigeOnlineWebAPIContext _context;
-        private IConfiguration _config;
+        private IPigeOnlineService _service;
+        private readonly IConfiguration _config;
 
-        public UsersController(PigeOnlineWebAPIContext context, IConfiguration config)
+        public UsersController(IPigeOnlineService service, IConfiguration config)
         {
-            _context = context;
+            _service = service;
             _config = config;
         }
 

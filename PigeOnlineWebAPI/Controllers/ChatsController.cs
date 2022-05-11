@@ -15,11 +15,13 @@ namespace PigeOnlineWebAPI.Controllers
     [ApiController]
     public class ChatsController : ControllerBase
     {
-        private readonly PigeOnlineWebAPIContext _context;
+        private IPigeOnlineService _service;
+        private readonly IConfiguration _config;
 
-        public ChatsController(PigeOnlineWebAPIContext context)
+        public ChatsController(IConfiguration config, IPigeOnlineService service)
         {
-            _context = context;
+            _service = service;
+            _config = config;
         }
 
         // GET: api/Chats

@@ -41,7 +41,7 @@ builder.Services.AddCors(options =>
         });
 
 });
-//builder.Services.AddSingleton<IPigeOnlineService>();
+builder.Services.AddSingleton<IPigeOnlineService, PigeOnlineService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
