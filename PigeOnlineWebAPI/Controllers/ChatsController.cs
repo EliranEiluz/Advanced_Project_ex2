@@ -12,7 +12,7 @@ using PigeOnlineWebAPI.Data;
 
 namespace PigeOnlineWebAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ChatsController : ControllerBase
@@ -28,66 +28,33 @@ namespace PigeOnlineWebAPI.Controllers
 
         // GET: api/Chats
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Chat>>> GetChat()
+        public async Task<ActionResult<List<Chat>>> GetChat()
         {
-            //return await _context.Chat.ToListAsync();
-            return NoContent();
-        }
+            string username = this.User.Claims.First(i => i.Type == "UserId").Value;
 
-        // GET: api/Chats/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Chat>> GetChat(int id)
-        {
-            //var chat = await _context.Chat.FindAsync(id);
-
-            //if (chat == null)
+            List<Chat> result =  await  _service.GetChatsByUsername(username);
+            if(result == null)
             {
                 return NotFound();
             }
-
-           // return chat;
+            return result;
         }
 
-        // PUT: api/Chats/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutChat(int id, Chat chat)
-        {
-            if (id != chat.Id)
-            {
-                return BadRequest();
-            }
 
-            //_context.Entry(chat).State = EntityState.Modified;
-
-            try
-            {
-                //await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ChatExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Chats
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPost]
-        public async Task<ActionResult<Chat>> PostChat(Chat chat)
+        public async Task<ActionResult<Chat>> PostChat(string username, string server)
         {
-            //_context.Chat.Add(chat);
-            //await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetChat", new { id = chat.Id }, chat);
+            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
+            int result = await _service.AddNewContact(currentUser, username, server);
+            if(result == 1)
+            {
+                return NoContent();
+            }
+            return Ok();
         }
 
         // DELETE: api/Chats/5

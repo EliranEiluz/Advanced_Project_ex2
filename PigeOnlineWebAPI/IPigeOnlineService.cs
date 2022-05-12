@@ -5,8 +5,9 @@ namespace PigeOnlineWebAPI;
 public interface IPigeOnlineService
 {
     Task<Chat> GetChatByUsername(string currentUser, string username);
+    Task<List<Chat>> GetChatsByUsername(string currentUser);
     Task<List<User>> GetContactsByUserName(string currentUser);
-    void AddNewContact(string currentUser, string newUser);
+    Task<int> AddNewContact(string currentUser, string newUser, string server);
     Task<User> GetContactByUsername(string currentUser, string username);
     void UpdateContactByUsername(string currentUser, string username);
     void DeleteContactByUsername(string currentUser, string username);
@@ -20,9 +21,10 @@ public interface IPigeOnlineService
 
     ////////////////////////////////////////
 
-    public Task<User> GetUser(string id);
-    public Task<int> PostUser(User user);
-    public Task<int> DeleteUser(string id);
+
+    Task<User> GetUser(string id);
+    Task<int> PostUser(User user);
+    Task<int> DeleteUser(string id);
 
     ////////////////////////////////////////
     
