@@ -81,5 +81,10 @@ namespace PigeOnlineWebAPI
         {
             throw new NotImplementedException();
         }
+
+        public void AddNewUser(User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

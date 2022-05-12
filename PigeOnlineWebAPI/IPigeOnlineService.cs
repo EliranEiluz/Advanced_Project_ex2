@@ -17,4 +17,6 @@ public interface IPigeOnlineService
     void DeleteMessageById(int messageID);
     void SendInvitation(string currentUser, string username, string url);
     void Transfer(string from, string to, string content);
+
+    void AddNewUser(User user);
 }
