@@ -1,7 +1,6 @@
 ﻿using PigeOnlineWebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace PigeOnlineWebAPI
 {
     public class PigeOnlineService : IPigeOnlineService
@@ -12,9 +11,35 @@ namespace PigeOnlineWebAPI
         {
             _context = context;
         }
-        public void AddNewContact(string currentUser, string newUser)
+        public async Task<int> AddNewContact(string currentUser, string newUser, string server)
         {
-            throw new NotImplementedException();
+            User current = await _context.User.FindAsync(currentUser);
+            User toAdd = await _context.User.FindAsync(newUser);
+            if(current.Chats.Find(e => e.ChatWith == newUser) == null)
+            {
+                return 1;
+            }
+            //int Id = _context.Chat.Max(e => e.Id) + 1;
+            Chat fromCurrentToUser = new Chat();
+            fromCurrentToUser.ServerURL = server;
+            fromCurrentToUser.ChatWith = newUser;
+            fromCurrentToUser.DisplayName = toAdd.DisplayName;
+            fromCurrentToUser.Date = "";
+            fromCurrentToUser.LastMessage = "";
+            fromCurrentToUser.Image = toAdd.Image;
+            current.Chats.Add(fromCurrentToUser);
+            try
+            {
+                _context.Chat.Add(fromCurrentToUser);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return 1;
+            }
+            await _context.SaveChangesAsync();
+            // add code to invite the contact in his server(invitation method)
+            return 0;
+
         }
 
         public void CreateMessageByUsername(string currentUser, string username, string message)
@@ -162,6 +187,16 @@ namespace PigeOnlineWebAPI
             await _context.SaveChangesAsync();
 
             return 0;
+        }
+
+        public async Task<List<Chat>> GetChatsByUsername(string currentUser)
+        {
+            var user = await _context.User.FindAsync(currentUser);
+            if(user == null)
+            {
+                return null;
+            }
+            return user.Chats;
         }
 
 
