@@ -28,21 +28,22 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Chat>>> GetChat()
         {
-            return await _context.Chat.ToListAsync();
+            //return await _context.Chat.ToListAsync();
+            return NoContent();
         }
 
         // GET: api/Chats/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Chat>> GetChat(int id)
         {
-            var chat = await _context.Chat.FindAsync(id);
+            //var chat = await _context.Chat.FindAsync(id);
 
-            if (chat == null)
+            //if (chat == null)
             {
                 return NotFound();
             }
 
-            return chat;
+           // return chat;
         }
 
         // PUT: api/Chats/5
@@ -55,11 +56,11 @@ namespace PigeOnlineWebAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(chat).State = EntityState.Modified;
+            //_context.Entry(chat).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -81,8 +82,8 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Chat>> PostChat(Chat chat)
         {
-            _context.Chat.Add(chat);
-            await _context.SaveChangesAsync();
+            //_context.Chat.Add(chat);
+            //await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetChat", new { id = chat.Id }, chat);
         }
@@ -91,21 +92,21 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChat(int id)
         {
-            var chat = await _context.Chat.FindAsync(id);
-            if (chat == null)
+            //var chat = await _context.Chat.FindAsync(id);
+            //if (chat == null)
             {
                 return NotFound();
             }
 
-            _context.Chat.Remove(chat);
-            await _context.SaveChangesAsync();
+            //_context.Chat.Remove(chat);
+            //await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool ChatExists(int id)
         {
-            return _context.Chat.Any(e => e.Id == id);
+            //return _context.Chat.Any(e => e.Id == id);
         }
     }
 }

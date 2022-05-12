@@ -44,7 +44,7 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> PutMessage(int id, int id2, Message message)
         {
-            var result = _service.UpdateMessageById(id2, message);
+            var result = await _service.UpdateMessageById(id2, message);
             if (result == 1)
             {
                 return BadRequest();
@@ -61,8 +61,8 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage(Message message)
         {
-            _context.Message.Add(message);
-            await _context.SaveChangesAsync();
+            //_context.Message.Add(message);
+            //await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMessage", new { id = message.Id }, message);
         }
@@ -71,14 +71,14 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(int id)
         {
-            var message = await _context.Message.FindAsync(id);
-            if (message == null)
+            //var message = await _context.Message.FindAsync(id);
+            //if (message == null)
             {
                 return NotFound();
             }
 
-            _context.Message.Remove(message);
-            await _context.SaveChangesAsync();
+            //_context.Message.Remove(message);
+            //await _context.SaveChangesAsync();
 
             return NoContent();
         }
