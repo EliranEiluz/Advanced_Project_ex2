@@ -26,18 +26,12 @@ namespace PigeOnlineWebAPI.Controllers
             _config = config;
         }
 
-        // GET: api/Users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
-        {
-            return await _context.User.ToListAsync();
-        }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(string id)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _service.GetUser(id);
 
             if (user == null)
             {
@@ -47,81 +41,33 @@ namespace PigeOnlineWebAPI.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
-        {
-            if (id != user.Username)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public void PostUser(User user)
         {
-            _context.User.Add(user);
-            try
-            {
-                await _context.SaveChangesAsync();
+            var result = _service.PostUser(user);
+            if(result == 1) {
+                //return Conflict();
             }
-            catch (DbUpdateException)
-            {
-                if (UserExists(user.Username))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+            else if(result == 2) {
+                //throw;
             }
-
-            return CreatedAtAction("GetUser", new { id = user.Username }, user);
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            var result = await _service.DeleteUser(id);
+            if (result == 1)
             {
                 return NotFound();
             }
 
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
-        private bool UserExists(string id)
-        {
-            return _context.User.Any(e => e.Username == id);
-        }
     }
 }

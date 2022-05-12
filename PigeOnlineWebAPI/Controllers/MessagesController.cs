@@ -24,18 +24,12 @@ namespace PigeOnlineWebAPI.Controllers
             _config = config;
         }
 
-        // GET: api/Messages
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessage()
-        {
-            return await _context.Message.ToListAsync();
-        }
 
-        // GET: api/Messages/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(int id)
+        [Route("api/contacts/:id/messages/:id2")]
+        [HttpGet]
+        public async Task<ActionResult<Message>> GetMessage(int id, int id2)
         {
-            var message = await _context.Message.FindAsync(id);
+            var message = await _service.GetMessageById(id);
 
             if (message == null)
             {
@@ -45,32 +39,19 @@ namespace PigeOnlineWebAPI.Controllers
             return message;
         }
 
-        // PUT: api/Messages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(int id, Message message)
+        // Change to get id1,id2.
+        [Route("api/contacts/:id/messages/:id2")]
+        [HttpPut]
+        public async Task<IActionResult> PutMessage(int id, int id2, Message message)
         {
-            if (id != message.Id)
+            var result = _service.UpdateMessageById(id2, message);
+            if (result == 1)
             {
                 return BadRequest();
-            }
-
-            _context.Entry(message).State = EntityState.Modified;
-
-            try
+            } else if (result == 2)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MessageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -103,9 +84,5 @@ namespace PigeOnlineWebAPI.Controllers
             return NoContent();
         }
 
-        private bool MessageExists(int id)
-        {
-            return _context.Message.Any(e => e.Id == id);
-        }
     }
 }

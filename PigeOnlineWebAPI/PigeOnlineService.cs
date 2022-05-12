@@ -1,4 +1,6 @@
 ﻿using PigeOnlineWebAPI.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace PigeOnlineWebAPI
 {
@@ -20,7 +22,7 @@ namespace PigeOnlineWebAPI
             throw new NotImplementedException();
         }
 
-        public void DeleteContactByUsername(string username)
+        public void DeleteContactByUsername(string currentUser, string username)
         {
             throw new NotImplementedException();
         }
@@ -52,17 +54,40 @@ namespace PigeOnlineWebAPI
             throw new NotImplementedException();
         }
 
-        public void UpdateContactByUsername(string username)
+        public void UpdateContactByUsername(string currentUser, string username)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateMessageById(int messageID, string newContent)
+        public async Task<int> UpdateMessageById(int messageID, Message message)
         {
-            throw new NotImplementedException();
+            if (messageID != message.Id)
+            {
+                return 1;
+            }
+
+            _context.Entry(message).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Message.Any(e => e.Id == messageID))
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 3;
+                }
+            }
+
+            return 0;
         }
 
-        public async Task<User> GetContactByUsername(string username)
+        public async Task<User> GetContactByUsername(string currentUser, string username)
         {
             throw new NotImplementedException();
         }
@@ -74,12 +99,73 @@ namespace PigeOnlineWebAPI
 
         public async Task<Message> GetMessageById(int messageID)
         {
-            throw new NotImplementedException();
+            var message = await _context.Message.FindAsync(messageID);
+
+            if (message == null)
+            {
+                return null;
+            }
+
+            return message;
         }
 
         public async Task<List<Message>> GetMessagesByUsername(string currentUser, string username)
         {
             throw new NotImplementedException();
         }
+
+        ////////////////////////////////////////////////////////
+
+        public async Task<User> GetUser(string id)
+        {
+            var user = await _context.User.FindAsync(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user;
+        }
+
+        public async Task<int> PostUser(User user)
+        {
+            _context.User.Add(user);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                // If already exist.
+                if (_context.User.Any(e => e.Username == user.Username))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 2;
+                }
+            }
+            return 0;
+        }
+
+        public async Task<int> DeleteUser(string id)
+        {
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
+            {
+                return 1;
+            }
+
+            _context.User.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return 0;
+        }
+
+        ////////////////////////////////////////////////////////
+        
+
     }
 }
