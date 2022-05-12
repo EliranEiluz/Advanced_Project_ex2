@@ -24,7 +24,6 @@ namespace PigeOnlineWebAPI.Controllers
             _config = config;
         }
 
-
         [Route("api/contacts/:id/messages/:id2")]
         [HttpGet]
         public async Task<ActionResult<Message>> GetMessage(int id, int id2)
