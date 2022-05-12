@@ -42,26 +42,6 @@ namespace PigeOnlineWebAPI
             
         }
 
-        public User GetContactByUsername(string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<User> GetContactsByUserName(string currentUser)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Message GetMessageById(int messageID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Message> GetMessagesByUsername(string currentUser, string username)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SendInvitation(string currentUser, string username, string url)
         {
             throw new NotImplementedException();
@@ -78,6 +58,26 @@ namespace PigeOnlineWebAPI
         }
 
         public void UpdateMessageById(int messageID, string newContent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> GetContactByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<User>> GetContactsByUserName(string currentUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Message> GetMessageById(int messageID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Message>> GetMessagesByUsername(string currentUser, string username)
         {
             throw new NotImplementedException();
         }
