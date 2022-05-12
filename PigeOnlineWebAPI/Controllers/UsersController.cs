@@ -45,9 +45,9 @@ namespace PigeOnlineWebAPI.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void PostUser(User user)
+        public async void PostUser(User user)
         {
-            var result = _service.PostUser(user);
+            var result = await _service.PostUser(user);
             if(result == 1) {
                 //return Conflict();
             }

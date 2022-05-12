@@ -44,7 +44,7 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> PutMessage(int id, int id2, Message message)
         {
-            var result = _service.UpdateMessageById(id2, message);
+            var result = await _service.UpdateMessageById(id2, message);
             if (result == 1)
             {
                 return BadRequest();
@@ -58,6 +58,7 @@ namespace PigeOnlineWebAPI.Controllers
 
         // POST: api/Messages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Route("api/contacts/:id/messages/:id2")]
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage(Message message)
         {
@@ -68,6 +69,7 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
         // DELETE: api/Messages/5
+        [Route("api/contacts/:id/messages/:id2")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(int id)
         {
