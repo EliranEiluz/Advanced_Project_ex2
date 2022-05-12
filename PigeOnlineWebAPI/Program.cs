@@ -41,7 +41,7 @@ builder.Services.AddCors(options =>
         });
 
 });
-builder.Services.AddSingleton<IPigeOnlineService>(x => new PigeOnlineService(x.GetService<PigeOnlineWebAPIContext>()));
+builder.Services.AddScoped<IPigeOnlineService, PigeOnlineService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
