@@ -27,9 +27,18 @@ namespace PigeOnlineWebAPI
             throw new NotImplementedException();
         }
 
-        public void DeleteMessageById(int messageID)
+        public async Task<int> DeleteMessageById(int messageID)
         {
-            throw new NotImplementedException();
+            var message = await _context.Message.FindAsync(messageID);
+            if (message == null)
+            {
+                return 1;
+            }
+
+            _context.Message.Remove(message);
+            await _context.SaveChangesAsync();
+
+            return 0;
         }
 
         public async Task<Chat> GetChatByUsername(string currentUser, string username)

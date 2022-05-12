@@ -14,7 +14,7 @@ public interface IPigeOnlineService
     void CreateMessageByUsername(string currentUser, string username, string message);
     Task<Message> GetMessageById(int messageID);
     Task<int> UpdateMessageById(int messageID, Message message);
-    void DeleteMessageById(int messageID);
+    Task<int> DeleteMessageById(int messageID);
     void SendInvitation(string currentUser, string username, string url);
     void Transfer(string from, string to, string content);
 

@@ -26,11 +26,11 @@ namespace PigeOnlineWebAPI.Controllers
             _config = config;
         }
 
-        [Route("api/contacts/:id/messages/:id2")]
+        [Route("api/contacts/{id}/messages/{id2}")]
         [HttpGet]
         public async Task<ActionResult<Message>> GetMessage(int id, int id2)
         {
-            var message = await _service.GetMessageById(id);
+            var message = await _service.GetMessageById(id2);
 
             if (message == null)
             {
@@ -42,7 +42,7 @@ namespace PigeOnlineWebAPI.Controllers
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         // Change to get id1,id2.
-        [Route("api/contacts/:id/messages/:id2")]
+        [Route("api/contacts/{id}/messages/{id2}")]
         [HttpPut]
         public async Task<IActionResult> PutMessage(int id, int id2, Message message)
         {
@@ -60,10 +60,11 @@ namespace PigeOnlineWebAPI.Controllers
 
         // POST: api/Messages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Route("api/contacts/:id/messages/:id2")]
+        [Route("api/contacts/{id}/messages")]
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage(Message message)
         {
+            // _service.CreateMessageByUsername();
             //_context.Message.Add(message);
             //await _context.SaveChangesAsync();
 
@@ -71,19 +72,16 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
         // DELETE: api/Messages/5
-        [Route("api/contacts/:id/messages/:id2")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMessage(int id)
+        [Route("api/contacts/{id}/messages/{id2}")]
+        //[HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMessage(int id, int id2)
         {
-            //var message = await _context.Message.FindAsync(id);
-            //if (message == null)
+            // remove from the messages list of the chats ?
+            var result = await _service.DeleteMessageById(id2);
+            if (result == 1)
             {
                 return NotFound();
             }
-
-            //_context.Message.Remove(message);
-            //await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
