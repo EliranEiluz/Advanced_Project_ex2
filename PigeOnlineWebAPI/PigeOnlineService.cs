@@ -11,7 +11,7 @@ namespace PigeOnlineWebAPI
         {
             _context = context;
         }
-        public async Task<int> AddNewContact(string currentUser, string newUser, string server)
+        public async Task<User> AddNewContact(string currentUser, string newUser, string server)
         {
             User current = await _context.User.FindAsync(currentUser);
             User toAdd = await _context.User.FindAsync(newUser); // FindAsync not case sensitive.
@@ -25,7 +25,7 @@ namespace PigeOnlineWebAPI
             */
             if (toAdd == null || toAdd.Username != newUser)
             {
-                return 1;
+                return null;
             }
 
             //int Id = _context.Chat.Max(e => e.Id) + 1;
@@ -43,11 +43,11 @@ namespace PigeOnlineWebAPI
             }
             catch (DbUpdateConcurrencyException)
             {
-                return 1;
+                return null;
             }
             await _context.SaveChangesAsync();
             // add code to invite the contact in his server(invitation method)
-            return 0;
+            return toAdd;
 
         }
 
@@ -163,7 +163,7 @@ namespace PigeOnlineWebAPI
         {
             var user = await _context.User.FindAsync(id);
 
-            if (user == null)
+            if (user == null || user.Username != id) // Find is not case sensitive.
             {
                 return null;
             }

@@ -45,15 +45,15 @@ namespace PigeOnlineWebAPI.Controllers
         // POST: api/Chats
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Chat>> PostChat(string username, string server)
+        public async Task<ActionResult<User>> PostChat(string username, string server)
         {
-            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
-            int result = await _service.AddNewContact(currentUser, username, server);
-            if(result == 1)
+            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value; // Problem if enter from register.
+            User result = await _service.AddNewContact(currentUser, username, server);
+            if(result == null)
             {
                 return NoContent();
             }
-            return Ok();
+            return Ok(result);
         }
 
         // DELETE: api/Chats/5

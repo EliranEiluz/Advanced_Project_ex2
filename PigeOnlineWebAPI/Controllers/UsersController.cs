@@ -58,6 +58,7 @@ namespace PigeOnlineWebAPI.Controllers
                 claims,
                 expires: DateTime.UtcNow.AddMinutes(20),
                 signingCredentials: mac);
+            // Return the token into username.
             user.Username = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(user);
         }
