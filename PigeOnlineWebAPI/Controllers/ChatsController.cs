@@ -47,7 +47,7 @@ namespace PigeOnlineWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostChat(string username, string server)
         {
-            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value; // Problem if enter from register.
+            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
             User result = await _service.AddNewContact(currentUser, username, server);
             if(result == null)
             {
