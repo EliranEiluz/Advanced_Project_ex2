@@ -14,11 +14,20 @@ namespace PigeOnlineWebAPI
         public async Task<int> AddNewContact(string currentUser, string newUser, string server)
         {
             User current = await _context.User.FindAsync(currentUser);
-            User toAdd = await _context.User.FindAsync(newUser);
-            if(current.Chats.Find(e => e.ChatWith == newUser) == null)
+            User toAdd = await _context.User.FindAsync(newUser); // FindAsync not case sensitive.
+
+            // This check applied in the client side.
+            /*
+            if(current.Chats.Find(e => e.ChatWith == newUser) == null) // != null
             {
                 return 1;
             }
+            */
+            if (toAdd == null || toAdd.Username != newUser)
+            {
+                return 1;
+            }
+
             //int Id = _context.Chat.Max(e => e.Id) + 1;
             Chat fromCurrentToUser = new Chat();
             fromCurrentToUser.ServerURL = server;
