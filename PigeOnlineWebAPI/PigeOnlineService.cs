@@ -36,6 +36,7 @@ namespace PigeOnlineWebAPI
             fromCurrentToUser.Date = "";
             fromCurrentToUser.LastMessage = "";
             fromCurrentToUser.Image = toAdd.Image;
+            fromCurrentToUser.chatOwner = current;
             current.Chats.Add(fromCurrentToUser);
             try
             {

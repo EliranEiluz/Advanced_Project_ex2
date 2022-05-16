@@ -16,7 +16,7 @@ namespace PigeOnlineWebAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -52,7 +52,13 @@ namespace PigeOnlineWebAPI.Migrations
                     b.Property<string>("ServerURL")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("chatOwnerUsername")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("chatOwnerUsername");
 
                     b.ToTable("Chat");
                 });
@@ -110,6 +116,17 @@ namespace PigeOnlineWebAPI.Migrations
                     b.HasKey("Username");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("PigeOnlineWebAPI.Chat", b =>
+                {
+                    b.HasOne("PigeOnlineWebAPI.User", "chatOwner")
+                        .WithMany()
+                        .HasForeignKey("chatOwnerUsername")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("chatOwner");
                 });
 #pragma warning restore 612, 618
         }
