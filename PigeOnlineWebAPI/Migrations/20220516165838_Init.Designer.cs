@@ -11,7 +11,7 @@ using PigeOnlineWebAPI.Data;
 namespace PigeOnlineWebAPI.Migrations
 {
     [DbContext(typeof(PigeOnlineWebAPIContext))]
-    [Migration("20220516151242_Init")]
+    [Migration("20220516165838_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -11,44 +11,66 @@ namespace PigeOnlineWebAPI
         {
             _context = context;
         }
-        public async Task<User> AddNewContact(string currentUser, string newUser, string server)
+        public async Task<int> AddNewContact(string currentUser, string newUser, string name, string server)
         {
             User current = await _context.User.FindAsync(currentUser);
-            User toAdd = await _context.User.FindAsync(newUser); // FindAsync not case sensitive.
-
-            // This check applied in the client side.
+            //User toAdd = await _context.User.FindAsync(newUser); // FindAsync not case sensitive.
             /*
-            if(current.Chats.Find(e => e.ChatWith == newUser) == null) // != null
-            {
-                return 1;
-            }
-            */
             if (toAdd == null || toAdd.Username != newUser)
             {
                 return null;
             }
+            */
 
             //int Id = _context.Chat.Max(e => e.Id) + 1;
             Chat fromCurrentToUser = new Chat();
             fromCurrentToUser.ServerURL = server;
             fromCurrentToUser.ChatWith = newUser;
-            fromCurrentToUser.DisplayName = toAdd.DisplayName;
+            fromCurrentToUser.DisplayName = name;
             fromCurrentToUser.Date = "";
             fromCurrentToUser.LastMessage = "";
-            fromCurrentToUser.Image = toAdd.Image;
+            fromCurrentToUser.Image = "";
             fromCurrentToUser.chatOwner = current;
-            current.Chats.Add(fromCurrentToUser);
             try
             {
                 _context.Chat.Add(fromCurrentToUser);
             }
             catch (DbUpdateConcurrencyException)
             {
-                return null;
+                return 1;
             }
             await _context.SaveChangesAsync();
             // add code to invite the contact in his server(invitation method)
-            return toAdd;
+            return 0;
+
+        }
+
+        public async Task<int> handleInvitation(string from, string to, string server)
+        {
+            User current = await _context.User.FindAsync(to); // check if null.
+            if(current == null)
+            {
+                return 1;
+            }
+            Chat newChat = new Chat();
+            newChat.ServerURL = server;
+            newChat.ChatWith = from;
+            newChat.DisplayName = from;
+            newChat.Date = "";
+            newChat.LastMessage = "";
+            newChat.Image = "";
+            newChat.chatOwner = current;
+            try
+            {
+                _context.Chat.Add(newChat);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return 1;
+            }
+            await _context.SaveChangesAsync();
+
+            return 0;
 
         }
 

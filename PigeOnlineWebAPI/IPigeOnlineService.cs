@@ -7,7 +7,8 @@ public interface IPigeOnlineService
     Task<Chat> GetChatByUsername(string currentUser, string username);
     Task<List<Chat>> GetChatsByUsername(string currentUser);
     Task<List<User>> GetContactsByUserName(string currentUser);
-    Task<User> AddNewContact(string currentUser, string newUser, string server);
+    Task<int> AddNewContact(string currentUser, string newUser, string name, string server);
+    public Task<int> handleInvitation(string from, string to, string server);
     Task<User> GetContactByUsername(string currentUser, string username);
     void UpdateContactByUsername(string currentUser, string username);
     void DeleteContactByUsername(string currentUser, string username);
