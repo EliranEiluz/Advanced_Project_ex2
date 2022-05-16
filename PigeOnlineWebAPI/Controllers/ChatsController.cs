@@ -45,16 +45,39 @@ namespace PigeOnlineWebAPI.Controllers
         // POST: api/Chats
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostChat(string username, string server)
+        public async Task<ActionResult> PostChat(string id, string name, string server)
         {
+            int result = 1;
             string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
-            User result = await _service.AddNewContact(currentUser, username, server);
-            if(result == null)
+
+            // ***** fetch call inventation. *****
+
+            result = await _service.AddNewContact(currentUser, id, name, server);
+
+            if(result == 1)
             {
                 return NoContent();
             }
-            return Ok(result);
+
+
+            return StatusCode(201);
         }
+
+        [Route("invitation")]
+        [HttpPost]
+        public async Task<ActionResult> getInvitation(string from, string to, string server)
+        {
+            int result = 1;
+            result = await _service.handleInvitation(from, to, server);
+
+            if (result == 1)
+            {
+                return NoContent();
+            }
+            return StatusCode(201);
+        }
+        
+
 
         // DELETE: api/Chats/5
         [HttpDelete("{id}")]
