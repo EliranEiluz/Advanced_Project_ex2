@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string ChatWith { get; set; }
 
-        public List<Message> Messages=new List<Message>();
+        public List<Message> Messages { get; set; }
         public string LastMessage { get; set; }
         public string Date { get; set; }
         public string DisplayName { get; set; }

@@ -37,7 +37,6 @@ namespace PigeOnlineWebAPI
             fromCurrentToUser.LastMessage = "";
             fromCurrentToUser.Image = toAdd.Image;
             fromCurrentToUser.chatOwner = current;
-            current.Chats.Add(fromCurrentToUser);
             try
             {
                 _context.Chat.Add(fromCurrentToUser);
@@ -210,12 +209,7 @@ namespace PigeOnlineWebAPI
 
         public async Task<List<Chat>> GetChatsByUsername(string currentUser)
         {
-            var user = await _context.User.FindAsync(currentUser);
-            if(user == null)
-            {
-                return null;
-            }
-            return user.Chats;
+            return await _context.Chat.Where(a => a.chatOwner.Username == currentUser).ToListAsync();
         }
 
 

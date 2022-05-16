@@ -16,7 +16,7 @@ namespace PigeOnlineWebAPI
         [Required]
         public string DisplayName { get; set; }
 
-        public List<Chat> Chats=new List<Chat>();
+        public List<Chat> Chats { get; set; }
 
     }
 }
