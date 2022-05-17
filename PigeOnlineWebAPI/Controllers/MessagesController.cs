@@ -51,31 +51,27 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
 
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // Change to get id1,id2.
+
         [Route("api/contacts/{id}/messages/{id2}")]
         [HttpPut]
-        public async Task<IActionResult> PutMessage(int id, int id2, Message message)
+        public async Task<IActionResult> PutMessage(int id, int id2, MesssageContent mesContent)
         {
-            var result = await _service.UpdateMessageById(id2, message);
+            var result = await _service.UpdateMessageById(id2, mesContent.Content);
             if (result == 1)
-            {
-                return BadRequest();
-            } else if (result == 2)
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return StatusCode(204);
         }
 
 
         [Route("api/contacts/{id}/messages")]
         [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message, string id)
+        public async Task<ActionResult<Message>> PostMessage(MesssageContent mesContent, string id)
         {
             string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
-            int result = await _service.postMessage(currentUser, id, message);
+            int result = await _service.postMessage(currentUser, id, mesContent.Content);
             if(result == 1)
             {
                 return NoContent();
@@ -85,18 +81,30 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
 
-        // DELETE: api/Messages/5
         [Route("api/contacts/{id}/messages/{id2}")]
         [HttpDelete]
         public async Task<IActionResult> DeleteMessage(int id, int id2)
         {
-            // remove from the messages list of the chats ?
             var result = await _service.DeleteMessageById(id2);
             if (result == 1)
             {
                 return NotFound();
             }
-            return NoContent();
+            return StatusCode(204);
+        }
+
+
+        [Route("api/transfer")]
+        [HttpPost]
+        public async Task<ActionResult<Message>> transfer(TransferParams mesContent)
+        {
+            int result = await _service.Transfer(mesContent.From, mesContent.To, mesContent.Content);
+            if (result == 1)
+            {
+                return NoContent();
+            }
+
+            return StatusCode(201);
         }
 
     }

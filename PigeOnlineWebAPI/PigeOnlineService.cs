@@ -75,13 +75,19 @@ namespace PigeOnlineWebAPI
         }
 
 
-        public async Task<int> postMessage(string currentUser, string contact, Message message)
+        public async Task<int> postMessage(string currentUser, string contact, string content)
         {
             Chat chat = await GetChatByUsername(currentUser, contact);
             if(chat == null)
             {
                 return 1;
             }
+            Message message = new Message();
+            message.From = currentUser;
+            message.Content = content;
+            message.Type = "text";
+            message.Date = DateTime.Now.ToString();
+            message.SenderPicture = "";
             message.chatOwnerId = chat.Id;
             _context.Message.Add(message);
             await _context.SaveChangesAsync();
@@ -119,9 +125,24 @@ namespace PigeOnlineWebAPI
             return chat;         
         }
 
-        public void Transfer(string from, string to, string content)
+        public async Task<int> Transfer(string from, string to, string content)
         {
-            throw new NotImplementedException();
+            Chat chat = await GetChatByUsername(to, from);
+            if(chat == null)
+            {
+                return 1;
+            }
+            Message message = new Message();
+            message.From = from;
+            message.Content = content;
+            message.Type = "text";
+            message.Date = DateTime.Now.ToString();
+            message.SenderPicture = "";
+            message.chatOwnerId = chat.Id;
+            _context.Message.Add(message);
+            await _context.SaveChangesAsync();
+            return 0;
+
         }
 
         public async Task<int> UpdateContactByUsername(string currentUser, string id, string server, string name)
@@ -138,32 +159,18 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
-        public async Task<int> UpdateMessageById(int messageID, Message message)
+        public async Task<int> UpdateMessageById(int messageID, String content)
         {
-            if (messageID != message.Id)
+            var message = await _context.Message.FindAsync(messageID);
+            if(message == null)
             {
                 return 1;
             }
-
-            _context.Entry(message).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Message.Any(e => e.Id == messageID))
-                {
-                    return 2;
-                }
-                else
-                {
-                    return 3;
-                }
-            }
-
+            message.Content = content;
+            _context.Message.Update(message);
+            await _context.SaveChangesAsync();
             return 0;
+
         }
 
 
@@ -222,19 +229,6 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
-        public async Task<int> DeleteUser(string id)
-        {
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
-            {
-                return 1;
-            }
-
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return 0;
-        }
 
         public async Task<List<Chat>> GetChatsByUsername(string currentUser)
         {

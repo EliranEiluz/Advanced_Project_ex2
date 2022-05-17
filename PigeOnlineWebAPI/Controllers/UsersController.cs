@@ -17,7 +17,6 @@ using PigeOnlineWebAPI.Data;
 namespace PigeOnlineWebAPI.Controllers
 {
     //[Authorize]
-    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -31,9 +30,7 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
 
-        // POST: api/Users/login
-        [Route("Login")]
-        //[ActionName("Login")]
+        [Route("api/Users/Login")]
         [HttpPost]
         public async Task<IActionResult> Login(UserValidation userValidation)
         {
@@ -64,9 +61,8 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("api/Users")]
         public async Task<IActionResult> PostUser(User user)
         {
             var result = await _service.PostUser(user);
@@ -93,19 +89,6 @@ namespace PigeOnlineWebAPI.Controllers
 
         }
 
-
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
-        {
-            var result = await _service.DeleteUser(id);
-            if (result == 1)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
-        }
 
         //[HttpGet]
         //public async Task<IActionResult> Logout(User user)
