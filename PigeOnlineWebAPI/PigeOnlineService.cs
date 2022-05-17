@@ -29,7 +29,7 @@ namespace PigeOnlineWebAPI
             fromCurrentToUser.DisplayName = name;
             fromCurrentToUser.Date = "";
             fromCurrentToUser.LastMessage = "";
-            fromCurrentToUser.Image = "";
+            fromCurrentToUser.Image = "im3.jpg"; // from public dir.
             fromCurrentToUser.chatOwner = current;
             try
             {
@@ -58,7 +58,7 @@ namespace PigeOnlineWebAPI
             newChat.DisplayName = from;
             newChat.Date = "";
             newChat.LastMessage = "";
-            newChat.Image = "";
+            newChat.Image = "im3.jpg";
             newChat.chatOwner = current;
             try
             {
@@ -87,7 +87,7 @@ namespace PigeOnlineWebAPI
             message.Content = content;
             message.Type = "text";
             message.Date = DateTime.Now.ToString();
-            message.SenderPicture = "";
+            message.SenderPicture = "im3.jpg";
             message.chatOwnerId = chat.Id;
             _context.Message.Add(message);
             await _context.SaveChangesAsync();
