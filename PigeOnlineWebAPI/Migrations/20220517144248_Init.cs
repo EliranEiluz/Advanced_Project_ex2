@@ -18,7 +18,8 @@ namespace PigeOnlineWebAPI.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SenderPicture = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    SenderPicture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    chatOwnerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
