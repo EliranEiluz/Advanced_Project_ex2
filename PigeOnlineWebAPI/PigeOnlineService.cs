@@ -91,6 +91,9 @@ namespace PigeOnlineWebAPI
             message.chatOwnerId = chat.Id;
             _context.Message.Add(message);
             await _context.SaveChangesAsync();
+            chat.LastMessage = content;
+            _context.Chat.Update(chat);
+            await _context.SaveChangesAsync();
             return 0;
         }
 
@@ -137,9 +140,12 @@ namespace PigeOnlineWebAPI
             message.Content = content;
             message.Type = "text";
             message.Date = DateTime.Now.ToString();
-            message.SenderPicture = "";
+            message.SenderPicture = "im3.jpg";
             message.chatOwnerId = chat.Id;
             _context.Message.Add(message);
+            await _context.SaveChangesAsync();
+            chat.LastMessage = content;
+            _context.Chat.Update(chat);
             await _context.SaveChangesAsync();
             return 0;
 
