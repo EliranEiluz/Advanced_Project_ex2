@@ -87,7 +87,7 @@ namespace PigeOnlineWebAPI.Controllers
 
         // DELETE: api/Messages/5
         [Route("api/contacts/{id}/messages/{id2}")]
-        //[HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteMessage(int id, int id2)
         {
             // remove from the messages list of the chats ?
