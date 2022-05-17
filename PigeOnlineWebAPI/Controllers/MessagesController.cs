@@ -12,7 +12,7 @@ using PigeOnlineWebAPI.Data;
 
 namespace PigeOnlineWebAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class MessagesController : ControllerBase
     {
@@ -66,9 +66,10 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
 
-        [Route("api/contacts/{id}/messages")]
+        
         [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(MesssageContent mesContent, string id)
+        [Route("api/contacts/{id}/messages")]
+        public async Task<ActionResult> PostMessage(string id, [FromBody] MesssageContent mesContent)
         {
             string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
             int result = await _service.postMessage(currentUser, id, mesContent.Content);
