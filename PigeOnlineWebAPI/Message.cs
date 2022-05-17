@@ -9,7 +9,7 @@
         public string Date { get; set; }
         public string SenderPicture { get; set; }
 
-        //public Chat messagesOwner { get; set; }
+        public int? chatOwnerId { get; set; }
 
     }
 }

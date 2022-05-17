@@ -13,7 +13,6 @@ using PigeOnlineWebAPI.Data;
 namespace PigeOnlineWebAPI.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
     public class MessagesController : ControllerBase
     {
@@ -25,6 +24,17 @@ namespace PigeOnlineWebAPI.Controllers
             _service = service;
             _config = config;
         }
+
+
+        [Route("api/contacts/{id}/messages")]
+        [HttpGet]
+        public async Task<ActionResult<List<Message>>> GetMessages(string id)
+        {
+            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
+            List<Message> messages = await _service.GetMessagesWithContact(currentUser, id);            
+            return messages;      
+        }
+
 
         [Route("api/contacts/{id}/messages/{id2}")]
         [HttpGet]
@@ -39,6 +49,7 @@ namespace PigeOnlineWebAPI.Controllers
 
             return message;
         }
+
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         // Change to get id1,id2.
@@ -58,18 +69,21 @@ namespace PigeOnlineWebAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Messages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [Route("api/contacts/{id}/messages")]
         [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message)
+        public async Task<ActionResult<Message>> PostMessage(Message message, string id)
         {
-            // _service.CreateMessageByUsername();
-            //_context.Message.Add(message);
-            //await _context.SaveChangesAsync();
+            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
+            int result = await _service.postMessage(currentUser, id, message);
+            if(result == 1)
+            {
+                return NoContent();
+            }
 
-            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
+            return StatusCode(201);
         }
+
 
         // DELETE: api/Messages/5
         [Route("api/contacts/{id}/messages/{id2}")]

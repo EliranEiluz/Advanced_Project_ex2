@@ -12,8 +12,7 @@ using PigeOnlineWebAPI.Data;
 
 namespace PigeOnlineWebAPI.Controllers
 {
-    //[Authorize]
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ChatsController : ControllerBase
     {
@@ -26,9 +25,10 @@ namespace PigeOnlineWebAPI.Controllers
             _config = config;
         }
 
-        // GET: api/Chats
+        // api/contacts - to get all chats of currrent user.
         [HttpGet]
-        public async Task<ActionResult<List<Chat>>> GetChat()
+        [Route("api/contacts")]
+        public async Task<ActionResult<List<Chat>>> GetChats()
         {
             string username = this.User.Claims.First(i => i.Type == "UserId").Value;
 
@@ -40,19 +40,32 @@ namespace PigeOnlineWebAPI.Controllers
             return result;
         }
 
+        // api/contacts/id - to get specific chat of currrent user with id.
+        [HttpGet]
+        [Route("api/contacts/{id}")]
+        public async Task<ActionResult<Chat>> GetChat(string id)
+        {
+            string username = this.User.Claims.First(i => i.Type == "UserId").Value;
+
+            Chat chat = await _service.GetChatByUsername(username, id);
+            if (chat == null)
+            {
+                return NotFound();
+            }
+            return chat;
+        }
 
 
-        // POST: api/Chats
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
+        // api/contacts - to add new contact to current user.
         [HttpPost]
-        public async Task<ActionResult> PostChat(string id, string name, string server)
+        [Route("api/contacts")]
+        public async Task<ActionResult> PostChat(PostContactParams details)
         {
             int result = 1;
             string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
 
-            // ***** fetch call inventation. *****
-
-            result = await _service.AddNewContact(currentUser, id, name, server);
+            result = await _service.AddNewContact(currentUser, details.Id, details.Name, details.Server);
 
             if(result == 1)
             {
@@ -63,12 +76,13 @@ namespace PigeOnlineWebAPI.Controllers
             return StatusCode(201);
         }
 
-        [Route("invitation")]
+        // api/invitations - to get invitation from another user that add me.
+        [Route("api/invitations")]
         [HttpPost]
-        public async Task<ActionResult> getInvitation(string from, string to, string server)
+        public async Task<ActionResult> getInvitation(InvitationParams details)
         {
             int result = 1;
-            result = await _service.handleInvitation(from, to, server);
+            result = await _service.handleInvitation(details.From, details.To, details.Server);
 
             if (result == 1)
             {
@@ -79,26 +93,33 @@ namespace PigeOnlineWebAPI.Controllers
         
 
 
-        // DELETE: api/Chats/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteChat(int id)
+        [HttpDelete]
+        [Route("api/contacts/{id}")]
+        public async Task<IActionResult> DeleteChat(string id)
         {
-            //var chat = await _context.Chat.FindAsync(id);
-            //if (chat == null)
+            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
+            var result = await _service.DeleteContactByUsername(currentUser, id);
+            if (result == 1)
             {
                 return NotFound();
             }
 
-            //_context.Chat.Remove(chat);
-            //await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok();
         }
 
-        private bool ChatExists(int id)
+        [HttpPut]
+        [Route("api/contacts/{id}")]
+        public async Task<IActionResult> updateChat(PutContactParams details, string id)
         {
-            //return _context.Chat.Any(e => e.Id == id);
-            return false;
+            string currentUser = this.User.Claims.First(i => i.Type == "UserId").Value;
+            var result = await _service.UpdateContactByUsername(currentUser, id, details.Server, details.Name);
+            if (result == 1)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
+
     }
 }

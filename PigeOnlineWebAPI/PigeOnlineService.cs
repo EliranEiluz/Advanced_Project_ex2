@@ -74,14 +74,28 @@ namespace PigeOnlineWebAPI
 
         }
 
-        public void CreateMessageByUsername(string currentUser, string username, string message)
+        public async Task<int> postMessage(string currentUser, string contact, Message message)
         {
-            throw new NotImplementedException();
+            Chat chat = await GetChatByUsername(currentUser, contact);
+            if(chat == null)
+            {
+                return 1;
+            }
+            message.chatOwnerId = chat.Id;
+            _context.Message.Add(message);
+            await _context.SaveChangesAsync();
+            return 0;
         }
 
-        public void DeleteContactByUsername(string currentUser, string username)
+    public async Task<int> DeleteContactByUsername(string currentUser, string username)
         {
-            throw new NotImplementedException();
+            var chat = await _context.Chat.Where(chat=>chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
+            if(chat == null) {
+                return 1; 
+            }
+            _context.Chat.Remove(chat);
+            await _context.SaveChangesAsync();
+            return 0;
         }
 
         public async Task<int> DeleteMessageById(int messageID)
@@ -100,19 +114,8 @@ namespace PigeOnlineWebAPI
 
         public async Task<Chat> GetChatByUsername(string currentUser, string username)
         {
-            var user = await _context.User.FindAsync(currentUser);
-            if(user != null)
-            {
-                var chat = user.Chats.Find(c => c.ChatWith == username);
-                return chat;
-            }
-            return null;
-            
-        }
-
-        public void SendInvitation(string currentUser, string username, string url)
-        {
-            throw new NotImplementedException();
+            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
+            return chat;         
         }
 
         public void Transfer(string from, string to, string content)
@@ -120,9 +123,18 @@ namespace PigeOnlineWebAPI
             throw new NotImplementedException();
         }
 
-        public void UpdateContactByUsername(string currentUser, string username)
+        public async Task<int> UpdateContactByUsername(string currentUser, string id, string server, string name)
         {
-            throw new NotImplementedException();
+            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == id).FirstAsync();
+            if (chat == null)
+            {
+                return 1;
+            }
+            chat.ServerURL = server;
+            chat.DisplayName = name;
+            _context.Chat.Update(chat);
+            await _context.SaveChangesAsync();
+            return 0;
         }
 
         public async Task<int> UpdateMessageById(int messageID, Message message)
@@ -153,15 +165,6 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
-        public async Task<User> GetContactByUsername(string currentUser, string username)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<User>> GetContactsByUserName(string currentUser)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<Message> GetMessageById(int messageID)
         {
@@ -175,9 +178,11 @@ namespace PigeOnlineWebAPI
             return message;
         }
 
-        public async Task<List<Message>> GetMessagesByUsername(string currentUser, string username)
+        public async Task<List<Message>> GetMessagesWithContact(string currentUser, string username)
         {
-            throw new NotImplementedException();
+            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
+            List<Message> messages = await _context.Message.Where(message => message.chatOwnerId == chat.Id).ToListAsync();
+            return messages;
         }
 
         ////////////////////////////////////////////////////////
