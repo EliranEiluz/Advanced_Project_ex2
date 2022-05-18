@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.SignalR;
 namespace PigeOnlineWebAPI.Hubs
 
 {
-    [Authorize]
     public class PigeOnlineHub:Hub
     {
         private IPigeOnlineService _service;
@@ -20,11 +19,12 @@ namespace PigeOnlineWebAPI.Hubs
             User user = await _service.GetUser(details.To);
             if(user.ConnectionId != null)
             {
-                await Clients.User(user.ConnectionId).SendAsync(details.From, details.To, details.Content);
+                await Clients.User(user.ConnectionId).SendAsync("MessageRecived",details.From, details.To, details.Content);
             }
             
         }
 
+        /*
         public async Task NewChat(InvitationParams details)
         {
             User user = await _service.GetUser(details.To);
@@ -34,6 +34,7 @@ namespace PigeOnlineWebAPI.Hubs
             }
 
         }
+        */
 
         public async Task DeclareOnline(string username)
         {
