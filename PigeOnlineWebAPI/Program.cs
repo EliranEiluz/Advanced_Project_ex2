@@ -28,7 +28,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 
 });
-//builder.Services.AddSignalR();
+
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -52,10 +53,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseCors("Allow All");
 app.MapControllers();
-/*
+app.UseRouting();
+app.UseAuthorization();
 app.UseEndpoints(app =>
 {
     app.MapHub<PigeOnlineHub>("/PigeOnlineHub");
