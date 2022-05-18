@@ -28,7 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 
 });
-builder.Services.AddSignalR();
+//builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -55,8 +55,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("Allow All");
 app.MapControllers();
+/*
 app.UseEndpoints(app =>
 {
     app.MapHub<PigeOnlineHub>("/PigeOnlineHub");
 });
+*/
 app.Run();
