@@ -27,4 +27,6 @@ public interface IPigeOnlineService
     Task<User> GetUser(string id);
     Task<int> PostUser(User user);
 
+    Task<int> InsertConnectionId(string username, string ConnectionId);
+
 }

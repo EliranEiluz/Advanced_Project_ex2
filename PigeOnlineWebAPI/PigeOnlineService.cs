@@ -236,5 +236,17 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        public async Task<int> InsertConnectionId(string username, string ConnectionId)
+        {
+            User user = await GetUser(username);
+            if(user == null)
+            {
+                return 1;
+            }
+            user.ConnectionId = ConnectionId;
+            _context.User.Update(user);
+            await _context.SaveChangesAsync();
+            return 0;
+        }
     }
 }

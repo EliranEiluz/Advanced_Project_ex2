@@ -18,5 +18,7 @@ namespace PigeOnlineWebAPI
 
         public List<Chat> Chats = new List<Chat>();
 
+        public string? ConnectionId { get; set; }
+
     }
 }

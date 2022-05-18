@@ -5,6 +5,7 @@ using PigeOnlineWebAPI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using PigeOnlineWebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 
 });
-
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -54,5 +55,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("Allow All");
 app.MapControllers();
-
+app.UseEndpoints(app =>
+{
+    app.MapHub<PigeOnlineHub>("/PigeOnlineHub");
+});
 app.Run();
