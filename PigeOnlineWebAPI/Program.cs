@@ -62,5 +62,4 @@ app.UseEndpoints(app =>
 {
     app.MapHub<PigeOnlineHub>("/PigeOnlineHub");
 });
-*/
 app.Run();
