@@ -61,6 +61,7 @@ namespace PigeOnlineWebAPI.Controllers
         }
 
 
+        // Register.
         [HttpPost]
         [Route("api/Users")]
         public async Task<IActionResult> PostUser(User user)

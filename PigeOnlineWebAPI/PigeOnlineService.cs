@@ -11,18 +11,26 @@ namespace PigeOnlineWebAPI
         {
             _context = context;
         }
+
+
+        // *** Contacts & Chats ***
+
+        public async Task<Chat> GetChatByUsername(string currentUser, string username)
+        {
+            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
+            return chat;
+        }
+
+        public async Task<List<Chat>> GetChatsByUsername(string currentUser)
+        {
+            List<Chat> lst = await _context.Chat.Where(a => a.chatOwner.Username == currentUser).ToListAsync();
+            return lst;
+        }
+
         public async Task<int> AddNewContact(string currentUser, string newUser, string name, string server)
         {
             User current = await _context.User.FindAsync(currentUser);
-            //User toAdd = await _context.User.FindAsync(newUser); // FindAsync not case sensitive.
-            /*
-            if (toAdd == null || toAdd.Username != newUser)
-            {
-                return null;
-            }
-            */
 
-            //int Id = _context.Chat.Max(e => e.Id) + 1;
             Chat fromCurrentToUser = new Chat();
             fromCurrentToUser.ServerURL = server;
             fromCurrentToUser.ChatWith = newUser;
@@ -40,14 +48,12 @@ namespace PigeOnlineWebAPI
                 return 1;
             }
             await _context.SaveChangesAsync();
-            // add code to invite the contact in his server(invitation method)
             return 0;
-
         }
 
         public async Task<int> handleInvitation(string from, string to, string server)
         {
-            User current = await _context.User.FindAsync(to); // check if null.
+            User current = await _context.User.FindAsync(to);
             if(current == null)
             {
                 return 1;
@@ -74,6 +80,53 @@ namespace PigeOnlineWebAPI
 
         }
 
+        public async Task<int> UpdateContactByUsername(string currentUser, string id, string server, string name)
+        {
+            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == id).FirstAsync();
+            if (chat == null)
+            {
+                return 1;
+            }
+            chat.ServerURL = server;
+            chat.DisplayName = name;
+            _context.Chat.Update(chat);
+            await _context.SaveChangesAsync();
+            return 0;
+        }
+
+        public async Task<int> DeleteContactByUsername(string currentUser, string username)
+        {
+            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
+            if (chat == null)
+            {
+                return 1;
+            }
+            _context.Chat.Remove(chat);
+            await _context.SaveChangesAsync();
+            return 0;
+        }
+
+
+        // *** Messages ***
+
+        public async Task<Message> GetMessageById(int messageID)
+        {
+            var message = await _context.Message.FindAsync(messageID);
+
+            if (message == null)
+            {
+                return null;
+            }
+            return message;
+        }
+
+        public async Task<List<Message>> GetMessagesWithContact(string currentUser, string username)
+        {
+            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
+            List<Message> messages = await _context.Message.Where(message => message.chatOwnerId == chat.Id).ToListAsync();
+            return messages;
+        }
+
 
         public async Task<int> postMessage(string currentUser, string contact, string content)
         {
@@ -97,37 +150,6 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
-    public async Task<int> DeleteContactByUsername(string currentUser, string username)
-        {
-            var chat = await _context.Chat.Where(chat=>chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
-            if(chat == null) {
-                return 1; 
-            }
-            _context.Chat.Remove(chat);
-            await _context.SaveChangesAsync();
-            return 0;
-        }
-
-        public async Task<int> DeleteMessageById(int messageID)
-        {
-            var message = await _context.Message.FindAsync(messageID);
-            if (message == null)
-            {
-                return 1;
-            }
-
-            _context.Message.Remove(message);
-            await _context.SaveChangesAsync();
-
-            return 0;
-        }
-
-        public async Task<Chat> GetChatByUsername(string currentUser, string username)
-        {
-            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
-            return chat;         
-        }
-
         public async Task<int> Transfer(string from, string to, string content)
         {
             Chat chat = await GetChatByUsername(to, from);
@@ -148,27 +170,12 @@ namespace PigeOnlineWebAPI
             _context.Chat.Update(chat);
             await _context.SaveChangesAsync();
             return 0;
-
         }
 
-        public async Task<int> UpdateContactByUsername(string currentUser, string id, string server, string name)
-        {
-            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == id).FirstAsync();
-            if (chat == null)
-            {
-                return 1;
-            }
-            chat.ServerURL = server;
-            chat.DisplayName = name;
-            _context.Chat.Update(chat);
-            await _context.SaveChangesAsync();
-            return 0;
-        }
-
-        public async Task<int> UpdateMessageById(int messageID, String content)
+        public async Task<int> UpdateMessageById(int messageID, string content)
         {
             var message = await _context.Message.FindAsync(messageID);
-            if(message == null)
+            if (message == null)
             {
                 return 1;
             }
@@ -176,30 +183,24 @@ namespace PigeOnlineWebAPI
             _context.Message.Update(message);
             await _context.SaveChangesAsync();
             return 0;
-
         }
 
-
-        public async Task<Message> GetMessageById(int messageID)
+        public async Task<int> DeleteMessageById(int messageID)
         {
             var message = await _context.Message.FindAsync(messageID);
-
             if (message == null)
             {
-                return null;
+                return 1;
             }
 
-            return message;
+            _context.Message.Remove(message);
+            await _context.SaveChangesAsync();
+
+            return 0;
         }
 
-        public async Task<List<Message>> GetMessagesWithContact(string currentUser, string username)
-        {
-            var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
-            List<Message> messages = await _context.Message.Where(message => message.chatOwnerId == chat.Id).ToListAsync();
-            return messages;
-        }
 
-        ////////////////////////////////////////////////////////
+        // *** Users (Login & Register) ***
 
         public async Task<User> GetUser(string id)
         {
@@ -234,17 +235,6 @@ namespace PigeOnlineWebAPI
             }
             return 0;
         }
-
-
-        public async Task<List<Chat>> GetChatsByUsername(string currentUser)
-        {
-            List<Chat> lst = await _context.Chat.Where(a => a.chatOwner.Username == currentUser).ToListAsync();
-            return lst;
-        }
-
-
-        ////////////////////////////////////////////////////////
-
 
     }
 }

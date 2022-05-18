@@ -104,7 +104,7 @@ namespace PigeOnlineWebAPI.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return StatusCode(204);
         }
 
         [HttpPut]
@@ -118,7 +118,7 @@ namespace PigeOnlineWebAPI.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return StatusCode(204);
         }
 
     }
