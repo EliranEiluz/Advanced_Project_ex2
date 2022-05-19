@@ -16,7 +16,7 @@ using PigeOnlineWebAPI.Data;
 
 namespace PigeOnlineWebAPI.Controllers
 {
-    //[Authorize]
+
     [ApiController]
     public class UsersController : ControllerBase
     {

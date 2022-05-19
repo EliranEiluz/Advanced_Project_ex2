@@ -12,7 +12,7 @@ using PigeOnlineWebAPI.Data;
 
 namespace PigeOnlineWebAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class MessagesController : ControllerBase
     {
