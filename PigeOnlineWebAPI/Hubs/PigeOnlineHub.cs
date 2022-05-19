@@ -19,7 +19,8 @@ namespace PigeOnlineWebAPI.Hubs
             User user = await _service.GetUser(details.To);
             if(user.ConnectionId != null)
             {
-                await Clients.User(user.ConnectionId).SendAsync("MessageRecived",details.From, details.To, details.Content);
+                //await Clients.All.SendAsync("MessageRecived", details.From, details.To, details.Content);
+               await Clients.Client(user.ConnectionId).SendAsync("MessageRecived",details.From, details.To, details.Content);
             }
             
         }
@@ -38,7 +39,7 @@ namespace PigeOnlineWebAPI.Hubs
 
         public async Task DeclareOnline(string username)
         {
-            await _service.InsertConnectionId(username, Context.ConnectionId.ToString());
+            await _service.InsertConnectionId(username, Context.ConnectionId);
 
         }
     }
