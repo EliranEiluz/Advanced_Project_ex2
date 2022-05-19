@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PigeOnlineWebAPI.Data;
 
@@ -12,10 +11,9 @@ using PigeOnlineWebAPI.Data;
 namespace PigeOnlineWebAPI.Migrations
 {
     [DbContext(typeof(PigeOnlineWebAPIContext))]
-    [Migration("20220519071951_Init")]
-    partial class Init
+    partial class PigeOnlineWebAPIContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
