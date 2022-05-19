@@ -145,6 +145,7 @@ namespace PigeOnlineWebAPI
             _context.Message.Add(message);
             await _context.SaveChangesAsync();
             chat.LastMessage = content;
+            chat.Date = DateTime.Now.ToString();
             _context.Chat.Update(chat);
             await _context.SaveChangesAsync();
             return 0;
@@ -167,6 +168,7 @@ namespace PigeOnlineWebAPI
             _context.Message.Add(message);
             await _context.SaveChangesAsync();
             chat.LastMessage = content;
+            chat.Date = DateTime.Now.ToString();
             _context.Chat.Update(chat);
             await _context.SaveChangesAsync();
             return 0;
