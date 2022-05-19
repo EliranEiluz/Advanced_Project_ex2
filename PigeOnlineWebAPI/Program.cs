@@ -47,12 +47,14 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IPigeOnlineService, PigeOnlineService>();
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseAuthentication();
 app.UseCors("Allow All");
 app.MapControllers();

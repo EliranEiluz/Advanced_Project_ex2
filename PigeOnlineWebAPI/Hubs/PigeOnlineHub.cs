@@ -19,7 +19,6 @@ namespace PigeOnlineWebAPI.Hubs
             User user = await _service.GetUser(details.To);
             if(user.ConnectionId != null)
             {
-                //await Clients.All.SendAsync("MessageRecived", details.From, details.To, details.Content);
                await Clients.Client(user.ConnectionId).SendAsync("MessageRecived",details.From, details.To, details.Content);
             }
             
