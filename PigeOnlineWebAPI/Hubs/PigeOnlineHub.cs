@@ -42,5 +42,10 @@ namespace PigeOnlineWebAPI.Hubs
             await _service.InsertConnectionId(username, Context.ConnectionId);
 
         }
+
+        public async Task LogOut(string username)
+        {
+            await _service.DeleteConnectionId(username);
+        }
     }
 }
