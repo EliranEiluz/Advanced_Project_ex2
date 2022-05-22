@@ -13,20 +13,30 @@ namespace PigeOnlineWebAPI
         }
 
 
-        // *** Contacts & Chats ***
+        // ***** Contacts & Chats *****
 
+
+        /*
+        * The function get username of contact and return the chat with him. 
+        */
         public async Task<Chat> GetChatByUsername(string currentUser, string username)
         {
             var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
             return chat;
         }
 
+        /*
+        * The function get username of current user and return his chats.
+        */
         public async Task<List<Chat>> GetChatsByUsername(string currentUser)
         {
             List<Chat> lst = await _context.Chat.Where(a => a.chatOwner.Username == currentUser).ToListAsync();
             return lst;
         }
 
+        /*
+        * The function add new contact(chat) to the current user. 
+        */
         public async Task<int> AddNewContact(string currentUser, string newUser, string name, string server)
         {
             User current = await _context.User.FindAsync(currentUser);
@@ -51,6 +61,9 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        /*
+        * The function add new chat with the sender of invitation. 
+        */
         public async Task<int> handleInvitation(string from, string to, string server)
         {
             User current = await _context.User.FindAsync(to);
@@ -80,6 +93,9 @@ namespace PigeOnlineWebAPI
 
         }
 
+        /*
+        * The function update chat details(display name / server) with contact. 
+        */
         public async Task<int> UpdateContactByUsername(string currentUser, string id, string server, string name)
         {
             var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == id).FirstAsync();
@@ -94,6 +110,9 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        /*
+        * The function delete contact(chat). 
+        */
         public async Task<int> DeleteContactByUsername(string currentUser, string username)
         {
             var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
@@ -107,8 +126,12 @@ namespace PigeOnlineWebAPI
         }
 
 
-        // *** Messages ***
+        // ***** Messages *****
 
+
+        /*
+        * The function get messageID and return the message. 
+        */
         public async Task<Message> GetMessageById(int messageID)
         {
             var message = await _context.Message.FindAsync(messageID);
@@ -120,6 +143,9 @@ namespace PigeOnlineWebAPI
             return message;
         }
 
+        /*
+        * The function get contact name and return the messages of the current user with him. 
+        */
         public async Task<List<Message>> GetMessagesWithContact(string currentUser, string username)
         {
             var chat = await _context.Chat.Where(chat => chat.chatOwner.Username == currentUser && chat.ChatWith == username).FirstAsync();
@@ -127,7 +153,9 @@ namespace PigeOnlineWebAPI
             return messages;
         }
 
-
+        /*
+        * The function add new message which send by the current user. 
+        */
         public async Task<int> postMessage(string currentUser, string contact, string content)
         {
             Chat chat = await GetChatByUsername(currentUser, contact);
@@ -151,6 +179,9 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        /*
+        * The function get transfer of message (and save the message). 
+        */
         public async Task<int> Transfer(string from, string to, string content)
         {
             Chat chat = await GetChatByUsername(to, from);
@@ -174,6 +205,9 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        /*
+        * The function get messageID and update the content. 
+        */
         public async Task<int> UpdateMessageById(int messageID, string content)
         {
             var message = await _context.Message.FindAsync(messageID);
@@ -187,6 +221,9 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        /*
+        * The function get messageID and delete the message. 
+        */
         public async Task<int> DeleteMessageById(int messageID)
         {
             var message = await _context.Message.FindAsync(messageID);
@@ -202,8 +239,12 @@ namespace PigeOnlineWebAPI
         }
 
 
-        // *** Users (Login & Register) ***
+        // ***** Users (REGISTER/LOGIN/LOGOUT) *****
 
+
+        /*
+        * The function get username and return the user. 
+        */
         public async Task<User> GetUser(string id)
         {
             var user = await _context.User.FindAsync(id);
@@ -216,6 +257,9 @@ namespace PigeOnlineWebAPI
             return user;
         }
 
+        /*
+        * The function add new user (in REGISTER). 
+        */
         public async Task<int> PostUser(User user)
         {
             _context.User.Add(user);
@@ -238,6 +282,9 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        /*
+        * The function get username and add ConnectionId to the details of the user (in LOGIN). 
+        */
         public async Task<int> InsertConnectionId(string username, string ConnectionId)
         {
             User user = await GetUser(username);
@@ -251,6 +298,9 @@ namespace PigeOnlineWebAPI
             return 0;
         }
 
+        /*
+        * The function get username and delete ConnectionId from the details of the user (in LOGOUT). 
+        */
         public async Task<int> DeleteConnectionId(string username) 
         {
             User user = await GetUser(username);

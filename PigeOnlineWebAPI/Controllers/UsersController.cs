@@ -90,13 +90,5 @@ namespace PigeOnlineWebAPI.Controllers
 
         }
 
-
-        //[HttpGet]
-        //public async Task<IActionResult> Logout(User user)
-        //{
-            // return token with expires 0 
-            // delete connection id
-        //}
-
     }
 }

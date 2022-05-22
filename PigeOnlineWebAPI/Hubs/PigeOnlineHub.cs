@@ -14,6 +14,10 @@ namespace PigeOnlineWebAPI.Hubs
             _service = service;
         }
 
+
+        /*
+        * The function called when user send message -> and notify to 'MessageRecived' function of the target. 
+        */
         public async Task MessageSent(TransferParams details)
         {
             User user = await _service.GetUser(details.To);
@@ -25,23 +29,17 @@ namespace PigeOnlineWebAPI.Hubs
         }
 
         /*
-        public async Task NewChat(InvitationParams details)
-        {
-            User user = await _service.GetUser(details.To);
-            if (user.ConnectionId != null)
-            {
-                await Clients.User(user.ConnectionId).SendAsync(details.From, details.To, details.Server);
-            }
-
-        }
+        * The function called when user is online and insert his ConnectionId. 
         */
-
         public async Task DeclareOnline(string username)
         {
             await _service.InsertConnectionId(username, Context.ConnectionId);
 
         }
 
+        /*
+        * The function called when user is logout and delete his ConnectionId. 
+        */
         public async Task LogOut(string username)
         {
             await _service.DeleteConnectionId(username);

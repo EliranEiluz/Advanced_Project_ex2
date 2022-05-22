@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PigeOnlineWebAPI.Hubs;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PigeOnlineWebAPIContext>(options =>
