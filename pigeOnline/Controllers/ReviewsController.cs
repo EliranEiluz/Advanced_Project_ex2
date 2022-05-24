@@ -20,7 +20,9 @@ namespace pigeOnline.Controllers
             _context = context;
         }
 
-        // GET: Reviews
+        /*
+        * GET : The function return the reviews and average. 
+        */
         public async Task<IActionResult> Index()
         {
             List<Review> reviews = await _context.Review.ToListAsync();
@@ -29,7 +31,9 @@ namespace pigeOnline.Controllers
             return View(reviews);
         }
 
-        // GET: Reviews/Details/5
+        /*
+        * GET : Reviews/Details/{id} : The function return details of review by id. 
+        */
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,15 +51,17 @@ namespace pigeOnline.Controllers
             return View(review);
         }
 
-        // GET: Reviews/Create
+        /*
+        * GET : Reviews/Create : The function return create page. 
+        */
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Reviews/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /*
+        * POST : Reviews/Create : The function create new review. 
+        */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,RateNumber,Text")] Review review)
@@ -71,7 +77,9 @@ namespace pigeOnline.Controllers
             return View(review);
         }
 
-        // GET: Reviews/Edit/5
+        /*
+        * GET : Reviews/Edit/{id} : The function return edit page for review by id. 
+        */
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,9 +95,9 @@ namespace pigeOnline.Controllers
             return View(review);
         }
 
-        // POST: Reviews/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /*
+        * POST : Reviews/Edit/{id} : The function edit review by id. 
+        */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RateNumber,Text,TimeAndDate")] Review review)
@@ -123,7 +131,9 @@ namespace pigeOnline.Controllers
             return View(review);
         }
 
-        // GET: Reviews/Delete/5
+        /*
+        * GET : Reviews/Delete/{id} : The function return delete page for review by id. 
+        */
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +151,9 @@ namespace pigeOnline.Controllers
             return View(review);
         }
 
-        // POST: Reviews/Delete/5
+        /*
+        * POST : Reviews/Delete/{id} : The function delete review by id. 
+        */
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -152,8 +164,10 @@ namespace pigeOnline.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
-        // GET: Reviews/Search
+
+        /*
+        * GET : Reviews/Search/{searchVal} : The function return list of search result. 
+        */
         [Route("Reviews/Search/{searchVal}")]
         public async Task<List<Review>> Search(string searchVal)
         {
