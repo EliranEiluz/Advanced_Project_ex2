@@ -8,7 +8,7 @@
 This repository represents the second part out of four in Advanced Project 2 Course. In the first part, we built only the client side with react. Now, we're involving 
 two servers, when one of them will work as a ASP.NET Web-API server which will be used for the chat web application(validate login and registration, get chats and messages and so on), and the second one is a ASP.NET-MVC server that is used to hold the rating platform of the chat application.
 
-Now, after binding the client side with the server side, The chat web application works by the following method:
+**Now, after binding the client side with the server side, The chat web application works by the following method:**
 
 1. Registration:
    During the fill of the registation form, majority of the validity checks will be made in the client side(required fields aren't empty, the password follows the    requested regex and so on). when all the fields were filled correctly, the user will be able to click the "Register" button and the form will be sent to the 
