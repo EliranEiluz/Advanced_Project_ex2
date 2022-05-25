@@ -1,6 +1,6 @@
 # This project code was written by Ben Levi ID:318811304 and Eliran Eiluz ID:313268146
 # The PigeOnlineWebAPI and pigeOnline projects requires from you to create database. Please build database by writing "Add-Migration #ANY_NAME" and then "Update-Database" in the Package Manager Console on visual studio.DO IT FOR EACH OF THE SERVERS! The database that will be created can be found on: SQL Server Object Explorer->ProjectModels->DatabaseName.
-# The ReactRepo doesn't contain the "node_modules" folder. SO, after pulling the project, please open cmd and intsall node modules by the command "npm install".
+# The ReactRepo doesn't contain the "node_modules" folder. So, after cloning the project, please open cmd and intsall node_modules by the command "npm install".
 # Please run pigeOnline, PigeOnlineWebAPI(with Visual Studio) and ReactRepo(npm start) before using the code.
 # The PigeOnlineWebAPI uses JWT for Authentication and Authorization.
 # The chat web-application works with SignalR.
