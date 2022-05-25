@@ -2,7 +2,7 @@
 # The PigeOnlineWebAPI and pigeOnline projects requires from you to create database. Please build database by writing "Add-Migration #ANY_NAME" and then "Create-Database" in the Package Manager Console on visual studio.DO IT FOR EACH OF THE SERVERS! The database that will be created can be found on: SQL Server Object Explorer->ProjectModels->DatabaseName.
 # Please run pigeOnline, PigeOnlineWebAPI(with Visual Studio) and ReactRepo(npm start) before using the code.
 # The PigeOnlineWebAPI uses JWT for Authentication and Authorization.
-# The chat application works with SignalR.
+# The chat web-application works with SignalR.
 
 This repository represents the second part out of four in Advanced Project 2 Course. In the first part, we built only the client side with react. Now, we're involving 
 Two servers, when one of them will work as a ASP.NET Web-API server which will be used for the chat web application(validate login and registration, get chats and messages and so on), and the second one is a ASP.NET-MVC server that is used to hold the rating platform of the chat application.
@@ -22,7 +22,16 @@ Now, after binding the client side with the server side, The chat web applicatio
    1. Username of this user
    2. The name he wants to see for this user on the chat menu(display name).
    3. The server that the user he wishes to chat with is registered to.
- After filling those fileds, an "Invitation"
+ After filling those fileds, an "Invitation"(as requested in the API building instructions) sent to the server that the user filled when trying to add the new user(This server might be the same server as the sender user, if they both are registered to the same server). If the server responded with "Ok", than we add this chat to our server and than localy on client's browser.
+ 
+ 4.Sending new message:
+   When sending a new message, we send a "transfer" request to the other user's server(might be the same server as ours - if this user is registered to our server)
+ 
+ 
+ 5.SignalR
+   When moving to the chat page, a SignalR web-socket is opened between the client and the server.
+   
+6. Rating
 
   
  
