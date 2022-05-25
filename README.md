@@ -17,7 +17,7 @@ Now, after binding the client side with the server side, The chat web applicatio
   As in the registation, some of the validity checks will be made in the client side(fields aren't empty and so on). After those checks passed, the user will be able to click the "Login" button, and the form will be passed to the Web-API server. The server will check that the username exists and the password entered is correct.In case it is, the sever will generate a JWT token for this user, and the user will be passed to his chat page, where he will be able to see all his chats and messages.
   When passing to the chat page, a fetch from the web-api server will be made of all the chats this user has. messages with a specific user will be fetched if and only if the user clicked on this chat, and the .
   
-*After login/registretion - all GET/POST request will be valid if and only if they conatin in the header the user's JWT Token!*   
+***After login/registretion - all GET/POST request will be valid if and only if they conatin in the header the user's JWT Token!***   
   
 3. Adding new chat:
    When a user wishes to add a new chat with a user, he needs to fill 3 fields:
